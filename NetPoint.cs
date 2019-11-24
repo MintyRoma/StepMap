@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading;
 
 namespace NetworkGraph
 {
@@ -11,10 +12,12 @@ namespace NetworkGraph
         #region PrivateValues
         private string name;
         private EList<NetPoint> connected = new EList<NetPoint>();
+        private EList<string> Ids = new EList<string>();
         private Point location = new Point();
         private int time;
         private TaskType pointype = TaskType.center;
         private string description;
+        private string id = null;
         #endregion
 
 
@@ -27,6 +30,10 @@ namespace NetworkGraph
             }
         }
 
+        public string ID
+        {
+            get { return id; }
+        }
 
         public string Name
         {
@@ -61,6 +68,16 @@ namespace NetworkGraph
             get { return connected; }
             set { connected = value;
                 ConnectionsChanged?.Invoke(this, EventArgs.Empty);
+                Rebuildids();
+            }
+        }
+
+        private void Rebuildids()
+        {
+            Ids.Clear();
+            foreach(NetPoint np in Connections)
+            {
+                Ids.Add(np.ID);
             }
         }
         #endregion
@@ -88,6 +105,12 @@ namespace NetworkGraph
             location = loc;
             connected.CollectionChanged += ChangeInside;
             TypeChanged?.Invoke(this, EventArgs.Empty);
+            string dict = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            for(int i=0;i<8;i++)
+            {
+                Random rnd = new Random();
+                id += dict[rnd.Next(dict.Count() - 1)];
+            }
         }
 
         private void ChangeInside(object sender, EventArgs e)
@@ -104,6 +127,22 @@ namespace NetworkGraph
             PointType = typ;
             connected.CollectionChanged += ChangeInside;
             TypeChanged?.Invoke(this,EventArgs.Empty);
+            string dict = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            for (int i = 0; i < 8; i++)
+            {
+                Random rnd = new Random();
+                id += dict[rnd.Next(dict.Count() - 1)];
+                Thread.Sleep(10);
+            }
+        }
+
+        public NetPoint()
+        {
+        }
+
+        public void InstallID(string ida)
+        {
+            if (id == null) id = ida;
         }
         #endregion
     }

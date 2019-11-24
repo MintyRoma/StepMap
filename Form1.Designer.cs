@@ -45,8 +45,8 @@
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
-            this.SaveBtn = new System.Windows.Forms.Button();
             this.Import = new System.Windows.Forms.Button();
+            this.SaveBtn = new System.Windows.Forms.Button();
             this.FindPath = new System.Windows.Forms.Button();
             this.SaveAsbtn = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.TasksTable)).BeginInit();
@@ -59,6 +59,8 @@
             // 
             // TasksTable
             // 
+            this.TasksTable.AllowUserToAddRows = false;
+            this.TasksTable.AllowUserToDeleteRows = false;
             this.TasksTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.TasksTable.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.nme,
@@ -95,7 +97,7 @@
             this.link,
             this.unlink});
             this.contextPainter.Name = "contextPainter";
-            this.contextPainter.Size = new System.Drawing.Size(194, 142);
+            this.contextPainter.Size = new System.Drawing.Size(194, 120);
             // 
             // AddtaskMB
             // 
@@ -213,15 +215,6 @@
             this.tableLayoutPanel3.Size = new System.Drawing.Size(499, 133);
             this.tableLayoutPanel3.TabIndex = 4;
             // 
-            // SaveBtn
-            // 
-            this.SaveBtn.Location = new System.Drawing.Point(252, 3);
-            this.SaveBtn.Name = "SaveBtn";
-            this.SaveBtn.Size = new System.Drawing.Size(244, 42);
-            this.SaveBtn.TabIndex = 0;
-            this.SaveBtn.Text = "Сохранить";
-            this.SaveBtn.UseVisualStyleBackColor = true;
-            // 
             // Import
             // 
             this.Import.Location = new System.Drawing.Point(3, 69);
@@ -230,6 +223,17 @@
             this.Import.TabIndex = 0;
             this.Import.Text = "Открыть";
             this.Import.UseVisualStyleBackColor = true;
+            this.Import.Click += new System.EventHandler(this.Import_Click);
+            // 
+            // SaveBtn
+            // 
+            this.SaveBtn.Location = new System.Drawing.Point(252, 3);
+            this.SaveBtn.Name = "SaveBtn";
+            this.SaveBtn.Size = new System.Drawing.Size(244, 42);
+            this.SaveBtn.TabIndex = 0;
+            this.SaveBtn.Text = "Сохранить";
+            this.SaveBtn.UseVisualStyleBackColor = true;
+            this.SaveBtn.Click += new System.EventHandler(this.SaveBtn_Click);
             // 
             // FindPath
             // 
@@ -249,6 +253,7 @@
             this.SaveAsbtn.TabIndex = 0;
             this.SaveAsbtn.Text = "Сохранить как";
             this.SaveAsbtn.UseVisualStyleBackColor = true;
+            this.SaveAsbtn.Click += new System.EventHandler(this.SaveAsbtn_Click);
             // 
             // NetworkGraphmap
             // 
@@ -257,7 +262,7 @@
             this.ClientSize = new System.Drawing.Size(1015, 572);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Name = "NetworkGraphmap";
-            this.Text = "Сетевой график";
+            this.Text = "Сетевой график: Безымянный";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.NetworkGraphmap_FormClosing);
             this.Load += new System.EventHandler(this.NetworkGraphmap_Load);
             ((System.ComponentModel.ISupportInitialize)(this.TasksTable)).EndInit();

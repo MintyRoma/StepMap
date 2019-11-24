@@ -31,28 +31,34 @@ namespace NetworkGraph
         {
             InitializeComponent();
             Task = point;
+            LocationChanged += ChangeTask;
             Task.ConnectionsChanged += connectchanged;
             Task.TypeChanged += Recolor;
             WireAllControls(this);
         }
 
+        private void ChangeTask(object sender, EventArgs e)
+        {
+            Task.Location = this.Location ;
+        }
+
         private void Recolor(object sender, EventArgs e)
         {
-            if (Task.PointType == TaskType.start)
-            {
-                panel2.BackColor = Color.FromArgb(235, 76, 52);
-                panel1.BackColor = Color.FromArgb(166, 49, 31);
-            }
-            if(Task.PointType==TaskType.end)
-            {
-                panel2.BackColor = Color.FromArgb(54, 199, 52);
-                panel1.BackColor = Color.FromArgb(29, 138, 28);
-            }
-            else
-            {
-                panel1.BackColor = Color.FromArgb(64, 64, 64);
-                panel2.BackColor = Color.DimGray;
-            }
+            //if (Task.PointType == TaskType.start)
+            //{
+            //    panel2.BackColor = Color.FromArgb(235, 76, 52);
+            //    panel1.BackColor = Color.FromArgb(166, 49, 31);
+            //}
+            //if(Task.PointType==TaskType.end)
+            //{
+            //    panel2.BackColor = Color.FromArgb(54, 199, 52);
+            //    panel1.BackColor = Color.FromArgb(29, 138, 28);
+            //}
+            //else
+            //{
+            //    panel1.BackColor = Color.FromArgb(64, 64, 64);
+            //    panel2.BackColor = Color.DimGray;
+            //}
         }
 
         private void connectchanged(object sender, EventArgs e)
@@ -137,6 +143,11 @@ namespace NetworkGraph
         private void Clicked(object sender, EventArgs e)
         {
             this.InvokeOnClick(this, EventArgs.Empty);
+        }
+
+        private void Panel2_Paint(object sender, PaintEventArgs e)
+        {
+
         }
     }
 }

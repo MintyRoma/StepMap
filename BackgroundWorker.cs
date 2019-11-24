@@ -92,8 +92,8 @@ namespace NetworkGraph
             TraceNum.Text = $"Операция {count} из {points.Count * points.Count}";
             Bar.Maximum = points.Count * points.Count;
             Bar.Value = 0;
-            List<NetPoint> way = new List<NetPoint>();
-            Trace(startnp, endnp, startnp.Time, way);
+            Stack<NetPoint> way = new Stack<NetPoint>();
+            Trace(startnp, endnp, 0, way);
             if (!everseen)
             {
                 if (MessageBox.Show("Конечные задачи не связаны промежуточными задачами", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Exclamation) == DialogResult.OK)
@@ -105,12 +105,12 @@ namespace NetworkGraph
             return;
         }
 
-        private void Trace(NetPoint startnp, NetPoint endnp, int time,List<NetPoint> way)
+        private void Trace(NetPoint startnp, NetPoint endnp, int time,Stack<NetPoint> way)
         {
             Bar.Value++;
-            if (startnp != endnp)
+            if (startnp != endnp && !way.Contains(startnp))
             {
-                way.Add(startnp);
+                way.Push(startnp);
                 time += startnp.Time;
                 foreach (NetPoint np in startnp.Connections)
                 {
@@ -119,15 +119,17 @@ namespace NetworkGraph
             }
             else
             {
-                way.Add(endnp);
+                way.Push(endnp);
                 time += endnp.Time;
                 everseen = true;
                 if (time<record)
                 {
-                    recordlist = way;
+                    recordlist = way.ToList();
+                    recordlist.Reverse();
                     record = time;
                 }
             }
+            way.Pop();
             return;
         }
 

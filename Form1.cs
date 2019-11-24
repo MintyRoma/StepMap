@@ -18,6 +18,7 @@ namespace NetworkGraph
         private List<NetPoint> way = new List<NetPoint>();
         private LinkStat status=LinkStat.none;
         private bool drag = false;
+        private string path=null;
 
         private enum LinkStat
         {
@@ -32,7 +33,7 @@ namespace NetworkGraph
         public List<NetPoint> Tasks
         {
             get
-            {   UpdateTable();
+            {   //UpdateTable();
                 return points;
             }
             set
@@ -165,45 +166,11 @@ namespace NetworkGraph
             Graphics gr = TasksPanel.CreateGraphics();
             gr.Clear(Color.White);
             gr.Dispose();
-            //TaskUI tsk = null;
-            //foreach(TaskUI tk in TasksPanel.Controls)
-            //{
-            //    if (tk.Task.Connections.Count>0)
-            //    {
-            //        tsk = tk;
-            //        break;
-            //    }
-            //}
-            //if (tsk!=null)StartPaintTrace(tsk);
             StartPaintTrace();
         }
 
         private void StartPaintTrace()
         {
-            //if (trace.Task.Connections!=null)
-            //{
-            //    foreach(NetPoint np in trace.Task.Connections)
-            //    {
-            //        if (!way.Contains(np))
-            //        {
-            //            TaskUI Ui = null;
-            //            foreach(TaskUI ttk in TasksPanel.Controls)
-            //            {
-            //                if (ttk.Task == np) Ui = ttk;
-            //            }
-            //            Graphics gr = TasksPanel.CreateGraphics();
-            //            Pen pn = new Pen(Color.Black);
-            //            gr.DrawLine(pn, new Point(trace.APoint.X,trace.APoint.Y), new Point(Ui.APoint.X,Ui.APoint.Y));
-            //            way.Add(np);
-            //            StartPaintTrace(Ui);
-            //        }
-            //    }
-            //    return trace;
-            //}
-            //else
-            //{
-            //    return trace;
-            //}
             TasksPanel.CreateGraphics().Clear(Color.White);
             foreach(TaskUI tk in TasksPanel.Controls)
             {
@@ -234,6 +201,8 @@ namespace NetworkGraph
         /// <param name="e">Аргумент события</param>
         private void StartReplace(object sender, MouseEventArgs e)
         {
+            if (e.Button == MouseButtons.Right) return;
+            if (status != LinkStat.none) return;
             editnow = (TaskUI)sender;
             drag=true;
         }
@@ -245,9 +214,10 @@ namespace NetworkGraph
         /// <param name="e">Аргумент события</param>
         private void ReplacePoint(object sender, MouseEventArgs e)
         {
-            StartPaintTrace();
+            
             if (drag)
             {
+                StartPaintTrace();
                 editnow.Location = new Point(Cursor.Position.X - TasksPanel.Location.X - this.Location.X-10, Cursor.Position.Y - TasksPanel.Location.Y - this.Location.Y-30);
             }
         }
@@ -302,7 +272,21 @@ namespace NetworkGraph
             {
                 way = null;
                 NetPoint unlink = ((TaskUI)sender).Task;
-                if (((TaskUI)sender) != ALink && ALink.Task.Connections.Contains(unlink)) ALink.Task.Connections.Remove(unlink);
+                if (((TaskUI)sender) != ALink && ALink.Task.Connections.Contains(unlink))
+                {
+                    ALink.Task.Connections.Remove(unlink);
+                    List<NetPoint> nplist = new List<NetPoint>();
+                    foreach (NetPoint np in points)
+                    {
+                        nplist.Add(np);
+                        if (np.ID == ALink.Task.ID)
+                        {
+                            nplist.Add( ALink.Task);
+                            break;
+                        }
+                    }
+                    
+                }
                 else MessageBox.Show("С данным объектом не установлена связь", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 Cursor = Cursors.Default;
                 status = LinkStat.none;
@@ -323,6 +307,7 @@ namespace NetworkGraph
             NetPoint task = sen.Task;
             EditTask edit = new EditTask(task);
             edit.SavingChanges += EditPoint;
+            edit.FormClosing += uxPlay;
             this.Enabled = false;
             edit.Show();
             StartPaintTrace();
@@ -475,6 +460,64 @@ namespace NetworkGraph
             status = LinkStat.unlinking;
             Cursor = Cursors.Hand;
             ALink = editnow;
+        }
+
+        private void SaveAsbtn_Click(object sender, EventArgs e)
+        {
+            FileManager fms = new FileManager();
+            fms.Saved += TakeFileName;
+            fms.Save(points,TasksPanel);
+        }
+
+        private void TakeFileName(string path)
+        {
+            if (path != null)
+            {
+                path = path.Substring(path.LastIndexOf('\\')+1);
+                this.Text = "Сетевой график: " + path;
+            }
+            else this.Text = "Сетевой график: Безымянный";
+        }
+
+        private void SaveBtn_Click(object sender, EventArgs e)
+        {
+            FileManager fms = new FileManager();
+            fms.Saved += TakeFileName;
+            fms.Save(points, path);
+        }
+
+        private void Import_Click(object sender, EventArgs e)
+        {
+            FileManager fms = new FileManager();
+            fms.Opened += OpenedFile;
+            fms.Open();
+        }
+        private void OpenedFile(string pathr, List<NetPoint> nplist)
+        {
+            TasksPanel.Controls.Clear();
+            if (pathr != null)
+            {
+                path = pathr.Substring(pathr.LastIndexOf('\\') + 1);
+                this.Text = "Сетевой график: " + path;
+            }
+            else this.Text = "Сетевой график: Безымянный";
+            Tasks = nplist;
+            foreach(NetPoint np in Tasks)
+            {
+                TaskUI tsk = new TaskUI(np);
+                tsk.DoubleClick += EditTask;
+                tsk.MouseClick += ClickPoint;
+                tsk.MouseUp += MousePointUp;
+                tsk.MouseMove += ReplacePoint;
+                tsk.MouseDown += StartReplace;
+                tsk.ConnectionsChanged += UpdateTableLink;
+                tsk.Task.ConnectionsChanged += RedrawTasks;
+                
+                TasksPanel.Controls.Add(tsk);
+                tsk.Location = np.Location;
+                
+            }
+            StartPaintTrace();
         }
     }
 }
