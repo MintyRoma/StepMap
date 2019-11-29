@@ -30,7 +30,7 @@ namespace NetworkGraph
             dialog.Filter = "Файл карты (*.smf)|*.smf|Файл изображения карты (*.png)|*.png|Все файлы|*.*";
             if (dialog.ShowDialog()==DialogResult.OK)
             {
-                if (dialog.FilterIndex == 2) CreateImage(dialog.FileName,pnl);
+                if (dialog.FilterIndex == 2) CreateImage(dialog.FileName,pnl,tasks);
                 else Create(dialog.FileName, tasks);
             }
             else
@@ -39,78 +39,108 @@ namespace NetworkGraph
             }
         }
 
-        private void CreateImage(string fileName, Panel pnl)
+        private void CreateImage(string fileName, Panel pnl, List<NetPoint>tasks)
         {
-            Bitmap bm = new Bitmap(pnl.Width,pnl.Height);
-            pnl.DrawToBitmap(bm, new Rectangle(0, 0, pnl.Width, pnl.Height));
+            int width = 10;
+            int height = 10;
+            foreach(TaskUI tsk in pnl.Controls)
+            {
+                if (tsk.Location.X > width) width = tsk.Location.X + 100;
+                if (tsk.Location.Y > height) height = tsk.Location.Y + 200;
+            }
+            Bitmap bm = new Bitmap(width, height);
+            Graphics g = Graphics.FromImage(bm);
+            SolidBrush sb = new SolidBrush(Color.White);
+            g.FillRectangle(sb, 0, 0, width, height);
+            foreach (NetPoint np in tasks)
+            {
+                foreach(NetPoint link in np.Connections)
+                {
+                    Pen p = new Pen(Color.FromArgb(64,64,64), 3);
+                    g.DrawLine(p, new Point(np.Location.X+35,np.Location.Y+47), new Point(link.Location.X+35,link.Location.Y+47));
+                    p.EndCap = System.Drawing.Drawing2D.LineCap.ArrowAnchor;
+                }
+            }  
+            foreach(TaskUI tsk in pnl.Controls)
+            {
+                tsk.DrawToBitmap(bm, new Rectangle(tsk.Location, tsk.Size));
+            }
             bm.Save(fileName);
+            MessageBox.Show("Файл успешно сохранен", "Сохранить", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void Create(string fileName, List<NetPoint> tasks)
         {
-            FileStream fs = new FileStream(fileName,FileMode.Create,FileAccess.ReadWrite,FileShare.ReadWrite);
-            XmlWriter xml = XmlWriter.Create(fs);
-            xml.WriteStartElement("map");
-            foreach(NetPoint np in tasks)
+            try
             {
-                xml.WriteStartElement("task");
-
-                xml.WriteStartElement("id");
-                xml.WriteString(np.ID);
-                xml.WriteEndElement();
-
-                xml.WriteStartElement("name");
-                xml.WriteString(np.Name);
-                xml.WriteEndElement();
-
-                xml.WriteStartElement("description");
-                xml.WriteString(np.Description);
-                xml.WriteEndElement();
-
-                xml.WriteStartElement("type");
-                switch (np.PointType)
+                FileStream fs = new FileStream(fileName, FileMode.Create, FileAccess.ReadWrite, FileShare.ReadWrite);
+                XmlWriter xml = XmlWriter.Create(fs);
+                xml.WriteStartElement("map");
+                foreach (NetPoint np in tasks)
                 {
-                    case TaskType.start:
-                        xml.WriteString("start");
-                        break;
-                    case TaskType.end:
-                        xml.WriteString("end");
-                        break;
-                    default:
-                        xml.WriteString("center");
-                        break;
-                }
-                xml.WriteEndElement();
+                    xml.WriteStartElement("task");
 
-                xml.WriteStartElement("time");
-                xml.WriteString(Convert.ToString(np.Time));
-                xml.WriteEndElement();
+                    xml.WriteStartElement("id");
+                    xml.WriteString(np.ID);
+                    xml.WriteEndElement();
 
-                xml.WriteStartElement("location");
-                xml.WriteStartElement("X");
-                xml.WriteString(Convert.ToString(np.Location.X));
-                xml.WriteEndElement();
-                xml.WriteStartElement("Y");
-                xml.WriteString(Convert.ToString(np.Location.Y));
-                xml.WriteEndElement();
-                xml.WriteEndElement();
+                    xml.WriteStartElement("name");
+                    xml.WriteString(np.Name);
+                    xml.WriteEndElement();
 
-                xml.WriteStartElement("connections");
-                foreach(NetPoint con in np.Connections)
-                {
-                    xml.WriteStartElement("taskID");
-                    xml.WriteString(con.ID);
+                    xml.WriteStartElement("description");
+                    xml.WriteString(np.Description);
+                    xml.WriteEndElement();
+
+                    xml.WriteStartElement("type");
+                    switch (np.PointType)
+                    {
+                        case TaskType.start:
+                            xml.WriteString("start");
+                            break;
+                        case TaskType.end:
+                            xml.WriteString("end");
+                            break;
+                        default:
+                            xml.WriteString("center");
+                            break;
+                    }
+                    xml.WriteEndElement();
+
+                    xml.WriteStartElement("time");
+                    xml.WriteString(Convert.ToString(np.Time));
+                    xml.WriteEndElement();
+
+                    xml.WriteStartElement("location");
+                    xml.WriteStartElement("X");
+                    xml.WriteString(Convert.ToString(np.Location.X));
+                    xml.WriteEndElement();
+                    xml.WriteStartElement("Y");
+                    xml.WriteString(Convert.ToString(np.Location.Y));
+                    xml.WriteEndElement();
+                    xml.WriteEndElement();
+
+                    xml.WriteStartElement("connections");
+                    foreach (NetPoint con in np.Connections)
+                    {
+                        xml.WriteStartElement("taskID");
+                        xml.WriteString(con.ID);
+                        xml.WriteEndElement();
+                    }
+                    xml.WriteEndElement();
+
                     xml.WriteEndElement();
                 }
                 xml.WriteEndElement();
-
-                xml.WriteEndElement();
+                xml.Close();
+                fs.Close();
+                MessageBox.Show("Файл успешно сохранен", "Сохранить", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                Saved?.Invoke(fileName);
             }
-            xml.WriteEndElement();
-            xml.Close();
-            fs.Close();
-            MessageBox.Show("Файл успешно сохранен", "Сохранить", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            Saved?.Invoke(fileName);
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         /// <summary>
@@ -229,6 +259,7 @@ namespace NetworkGraph
                         }
                         connections.Add(np);
                     }
+                    fs.Close();
                     Opened?.Invoke(dialog.FileName, connections);
                 }
                 else return;

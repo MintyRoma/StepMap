@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
@@ -94,6 +95,7 @@ namespace NetworkGraph
                     it.Enabled = false;
                 }
                 contextPainter.Items[0].Enabled = true;
+                if (points.Count > 0) contextPainter.Items[6].Enabled = true;
                 mouseloc = new Point(Cursor.Position.X-TasksPanel.Location.X-this.Location.X,Cursor.Position.Y-TasksPanel.Location.Y-this.Location.Y);
                 contextPainter.Show(Cursor.Position);
                 StartPaintTrace();
@@ -189,6 +191,11 @@ namespace NetworkGraph
                     Graphics g = TasksPanel.CreateGraphics();
                     Pen p = new Pen(Color.Black, 3);
                     g.DrawLine(p, tk.APoint, link.APoint);
+
+                    Point center = new Point((tk.APoint.X + link.APoint.X) / 2, (tk.APoint.Y + link.APoint.Y) / 2);
+                    AdjustableArrowCap bigArrow = new AdjustableArrowCap(5, 5);
+                    p.CustomEndCap = bigArrow;
+                    g.DrawLine(p, tk.APoint, center);
                 }
             }
             DrawShortPath();
@@ -251,6 +258,7 @@ namespace NetworkGraph
                     contextPainter.Items[3].Enabled = true;
                     if (editnow.Task.Connections.Count > 0) contextPainter.Items[5].Enabled = true;
                     if (points.Count > 1) contextPainter.Items[4].Enabled = true;
+                    if (points.Count>0)contextPainter.Items[6].Enabled = true;
                     contextPainter.Show(Cursor.Position);
                 }
             }
@@ -473,8 +481,7 @@ namespace NetworkGraph
         {
             if (path != null)
             {
-                path = path.Substring(path.LastIndexOf('\\')+1);
-                this.Text = "Сетевой график: " + path;
+                this.Text = "Сетевой график: " + path.Substring(path.LastIndexOf('\\') + 1);
             }
             else this.Text = "Сетевой график: Безымянный";
         }
@@ -497,8 +504,8 @@ namespace NetworkGraph
             TasksPanel.Controls.Clear();
             if (pathr != null)
             {
-                path = pathr.Substring(pathr.LastIndexOf('\\') + 1);
-                this.Text = "Сетевой график: " + path;
+                path = pathr;
+                this.Text = "Сетевой график: " + pathr.Substring(pathr.LastIndexOf('\\') + 1);
             }
             else this.Text = "Сетевой график: Безымянный";
             Tasks = nplist;
@@ -517,6 +524,13 @@ namespace NetworkGraph
                 tsk.Location = np.Location;
                 
             }
+            StartPaintTrace();
+        }
+
+        private void ClearToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            points.Clear();
+            TasksPanel.Controls.Clear();
             StartPaintTrace();
         }
     }

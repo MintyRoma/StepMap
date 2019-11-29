@@ -40,6 +40,7 @@
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.link = new System.Windows.Forms.ToolStripMenuItem();
             this.unlink = new System.Windows.Forms.ToolStripMenuItem();
+            this.ClearMapContextMenuStrip = new System.Windows.Forms.ToolStripMenuItem();
             this.TasksPanel = new System.Windows.Forms.Panel();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
@@ -95,9 +96,10 @@
             this.delete,
             this.toolStripSeparator1,
             this.link,
-            this.unlink});
+            this.unlink,
+            this.ClearMapContextMenuStrip});
             this.contextPainter.Name = "contextPainter";
-            this.contextPainter.Size = new System.Drawing.Size(194, 120);
+            this.contextPainter.Size = new System.Drawing.Size(194, 142);
             // 
             // AddtaskMB
             // 
@@ -138,6 +140,13 @@
             this.unlink.Size = new System.Drawing.Size(193, 22);
             this.unlink.Text = "Убрать связь с";
             this.unlink.Click += new System.EventHandler(this.Unlink_Click);
+            // 
+            // ClearMapContextMenuStrip
+            // 
+            this.ClearMapContextMenuStrip.Name = "ClearMapContextMenuStrip";
+            this.ClearMapContextMenuStrip.Size = new System.Drawing.Size(193, 22);
+            this.ClearMapContextMenuStrip.Text = "Очистить карту";
+            this.ClearMapContextMenuStrip.Click += new System.EventHandler(this.ClearToolStripMenuItem_Click);
             // 
             // TasksPanel
             // 
@@ -296,6 +305,7 @@
         private System.Windows.Forms.Button SaveBtn;
         private System.Windows.Forms.Button FindPath;
         private System.Windows.Forms.Button SaveAsbtn;
+        private System.Windows.Forms.ToolStripMenuItem ClearMapContextMenuStrip;
     }
 }
 

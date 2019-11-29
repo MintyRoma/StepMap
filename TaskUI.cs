@@ -39,7 +39,7 @@ namespace NetworkGraph
 
         private void ChangeTask(object sender, EventArgs e)
         {
-            Task.Location = this.Location ;
+            task.Location = this.Location ;
         }
 
         private void Recolor(object sender, EventArgs e)

@@ -90,7 +90,7 @@ namespace NetworkGraph
             count = 1;
             OperationName.Text = "Просчет";
             TraceNum.Text = $"Операция {count} из {points.Count * points.Count}";
-            Bar.Maximum = points.Count * points.Count;
+            Bar.Maximum = 100000;
             Bar.Value = 0;
             Stack<NetPoint> way = new Stack<NetPoint>();
             Trace(startnp, endnp, 0, way);
