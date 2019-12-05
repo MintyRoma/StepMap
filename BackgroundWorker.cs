@@ -29,8 +29,6 @@ namespace NetworkGraph
 
         public delegate void calculated(List<NetPoint> ppts);
         public event calculated ResultCalculated;
-        public delegate void errored(object sender);
-        public event errored ErrorInside;
 
         public BackgroundWorker(List<NetPoint> pointlist)
         {
@@ -45,7 +43,6 @@ namespace NetworkGraph
             NetPoint startnp = null;
             NetPoint endnp = null;
             OperationName.Text = "Проверка";
-            bool destroy = false;
             int count = 1;
             try
             {

@@ -270,5 +270,99 @@ namespace NetworkGraph
                 return;
             }
         }
+
+        public List<NetPoint> Open(string fileName)
+        {
+            try
+            {
+                    List<NetPoint> nplist = new List<NetPoint>();
+                    FileStream fs = new FileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.Read);
+                    XmlDocument xml = new XmlDocument();
+                    xml.Load(fs);
+                    XmlNode doc = xml.DocumentElement;
+                    Dictionary<string, string> links = new Dictionary<string, string>();
+                    foreach (XmlNode node in doc)
+                    {
+                        if (node.Name == "task")
+                        {
+                            NetPoint point = new NetPoint();
+                            foreach (XmlNode param in node)
+                            {
+                                if (param.Name == "id")
+                                {
+                                    point.InstallID(param.InnerText);
+                                }
+                                if (param.Name == "name") point.Name = param.InnerText;
+                                if (param.Name == "description") point.Description = param.InnerText;
+                                if (param.Name == "type")
+                                {
+                                    switch (param.InnerText)
+                                    {
+                                        case "start":
+                                            point.PointType = TaskType.start;
+                                            break;
+                                        case "end":
+                                            point.PointType = TaskType.end;
+                                            break;
+                                        default:
+                                            point.PointType = TaskType.center;
+                                            break;
+                                    }
+                                }
+                                if (param.Name == "time") point.Time = Convert.ToInt32(param.InnerText);
+                                if (param.Name == "location")
+                                {
+                                    Point import = new Point(0, 0);
+                                    foreach (XmlNode loc in param)
+                                    {
+                                        if (loc.Name == "X") import.X = Convert.ToInt32(loc.InnerText);
+                                        if (loc.Name == "Y") import.Y = Convert.ToInt32(loc.InnerText);
+                                    }
+                                    point.Location = import;
+                                }
+                                if (param.Name == "connections")
+                                {
+                                    string cons = "";
+                                    foreach (XmlNode tsk in param)
+                                    {
+                                        if (tsk.Name == "taskID")
+                                        {
+                                            cons += tsk.InnerText + '|';
+                                        }
+                                    }
+                                    if (cons.Length > 0) cons = cons.Substring(0, cons.Length - 1);
+                                    links.Add(point.ID, cons);
+                                }
+                            }
+                            nplist.Add(point);
+                        }
+                    }
+                    List<NetPoint> connections = new List<NetPoint>();
+                    foreach (NetPoint point in nplist)
+                    {
+                        NetPoint np = point;
+                        foreach (string key in links.Keys)
+                        {
+                            if (key == np.ID)
+                            {
+                                List<string> cons = new List<string>();
+                                cons = links[key].Split('|').ToList();
+                                foreach (NetPoint pont in nplist)
+                                {
+                                    if (cons.Contains(pont.ID)) np.Connections.Add(pont);
+                                }
+                            }
+                        }
+                        connections.Add(np);
+                    }
+                    fs.Close();
+                return connections;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return null;
+            }
+        }
     }
 }
