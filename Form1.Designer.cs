@@ -35,7 +35,12 @@
             this.Time = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Connected = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.contextPainter = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.AddtaskMB = new System.Windows.Forms.ToolStripMenuItem();
+            this.EditTaskMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.delete = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.link = new System.Windows.Forms.ToolStripMenuItem();
+            this.unlink = new System.Windows.Forms.ToolStripMenuItem();
             this.ClearMapContextMenuStrip = new System.Windows.Forms.ToolStripMenuItem();
             this.TasksPanel = new System.Windows.Forms.Panel();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
@@ -45,28 +50,23 @@
             this.FindPath = new System.Windows.Forms.Button();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.файлToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.MapStripmenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
-            this.программаToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.NewStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.OpenToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.SaveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.SaveAsКакToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ExitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.MapStripmenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.AddTaskStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.EditTaskStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.DeleteTaskMenuStripItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.CreateLinkMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.DeleteLinkStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.FindShortpathStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.программаToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.справкаToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.оПрограммеToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.AddtaskMB = new System.Windows.Forms.ToolStripMenuItem();
-            this.EditTaskMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.delete = new System.Windows.Forms.ToolStripMenuItem();
-            this.link = new System.Windows.Forms.ToolStripMenuItem();
-            this.unlink = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.TasksTable)).BeginInit();
             this.contextPainter.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
@@ -117,12 +117,52 @@
             this.unlink,
             this.ClearMapContextMenuStrip});
             this.contextPainter.Name = "contextPainter";
-            this.contextPainter.Size = new System.Drawing.Size(194, 164);
+            this.contextPainter.Size = new System.Drawing.Size(194, 142);
+            // 
+            // AddtaskMB
+            // 
+            this.AddtaskMB.Image = global::NetworkGraph.Properties.Resources.AddEvent_16x;
+            this.AddtaskMB.Name = "AddtaskMB";
+            this.AddtaskMB.Size = new System.Drawing.Size(193, 22);
+            this.AddtaskMB.Text = "Добавить задачу";
+            this.AddtaskMB.Click += new System.EventHandler(this.AddtaskMB_Click);
+            // 
+            // EditTaskMenuItem
+            // 
+            this.EditTaskMenuItem.Image = global::NetworkGraph.Properties.Resources.EventModify_16x;
+            this.EditTaskMenuItem.Name = "EditTaskMenuItem";
+            this.EditTaskMenuItem.Size = new System.Drawing.Size(193, 22);
+            this.EditTaskMenuItem.Text = "Редактировать задачу";
+            this.EditTaskMenuItem.Click += new System.EventHandler(this.EditTaskMenuItem_Click);
+            // 
+            // delete
+            // 
+            this.delete.Image = global::NetworkGraph.Properties.Resources.DeleteEvent_16x;
+            this.delete.Name = "delete";
+            this.delete.Size = new System.Drawing.Size(193, 22);
+            this.delete.Text = "Удалить задачу";
+            this.delete.Click += new System.EventHandler(this.Delete_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
             this.toolStripSeparator1.Size = new System.Drawing.Size(190, 6);
+            // 
+            // link
+            // 
+            this.link.Image = global::NetworkGraph.Properties.Resources.AddLink_16x;
+            this.link.Name = "link";
+            this.link.Size = new System.Drawing.Size(193, 22);
+            this.link.Text = "Связать с";
+            this.link.Click += new System.EventHandler(this.Link_Click);
+            // 
+            // unlink
+            // 
+            this.unlink.Image = global::NetworkGraph.Properties.Resources.RemoveLink_16x;
+            this.unlink.Name = "unlink";
+            this.unlink.Size = new System.Drawing.Size(193, 22);
+            this.unlink.Text = "Убрать связь с";
+            this.unlink.Click += new System.EventHandler(this.Unlink_Click);
             // 
             // ClearMapContextMenuStrip
             // 
@@ -241,40 +281,6 @@
             this.файлToolStripMenuItem.Size = new System.Drawing.Size(48, 26);
             this.файлToolStripMenuItem.Text = "Файл";
             // 
-            // MapStripmenuItem
-            // 
-            this.MapStripmenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.AddTaskStripMenuItem,
-            this.EditTaskStripMenuItem1,
-            this.DeleteTaskMenuStripItem,
-            this.toolStripSeparator2,
-            this.CreateLinkMenuItem1,
-            this.DeleteLinkStripMenuItem1,
-            this.toolStripSeparator3,
-            this.FindShortpathStripMenuItem1});
-            this.MapStripmenuItem.Name = "MapStripmenuItem";
-            this.MapStripmenuItem.Size = new System.Drawing.Size(50, 26);
-            this.MapStripmenuItem.Text = "Карта";
-            // 
-            // toolStripSeparator2
-            // 
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(228, 6);
-            // 
-            // toolStripSeparator3
-            // 
-            this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(228, 6);
-            // 
-            // программаToolStripMenuItem
-            // 
-            this.программаToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.справкаToolStripMenuItem,
-            this.оПрограммеToolStripMenuItem});
-            this.программаToolStripMenuItem.Name = "программаToolStripMenuItem";
-            this.программаToolStripMenuItem.Size = new System.Drawing.Size(84, 26);
-            this.программаToolStripMenuItem.Text = "Программа";
-            // 
             // NewStripMenuItem
             // 
             this.NewStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("NewStripMenuItem.Image")));
@@ -315,6 +321,21 @@
             this.ExitToolStripMenuItem.Text = "Выход из программы";
             this.ExitToolStripMenuItem.Click += new System.EventHandler(this.ExitToolStripMenuItem_Click);
             // 
+            // MapStripmenuItem
+            // 
+            this.MapStripmenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.AddTaskStripMenuItem,
+            this.EditTaskStripMenuItem1,
+            this.DeleteTaskMenuStripItem,
+            this.toolStripSeparator2,
+            this.CreateLinkMenuItem1,
+            this.DeleteLinkStripMenuItem1,
+            this.toolStripSeparator3,
+            this.FindShortpathStripMenuItem1});
+            this.MapStripmenuItem.Name = "MapStripmenuItem";
+            this.MapStripmenuItem.Size = new System.Drawing.Size(50, 26);
+            this.MapStripmenuItem.Text = "Карта";
+            // 
             // AddTaskStripMenuItem
             // 
             this.AddTaskStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("AddTaskStripMenuItem.Image")));
@@ -339,6 +360,11 @@
             this.DeleteTaskMenuStripItem.Text = "Удалить задачу";
             this.DeleteTaskMenuStripItem.Click += new System.EventHandler(this.DeleteTaskMenuStripItem_Click);
             // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(228, 6);
+            // 
             // CreateLinkMenuItem1
             // 
             this.CreateLinkMenuItem1.Image = global::NetworkGraph.Properties.Resources.AddLink_16x;
@@ -355,6 +381,11 @@
             this.DeleteLinkStripMenuItem1.Text = "Удалить связь";
             this.DeleteLinkStripMenuItem1.Click += new System.EventHandler(this.DeleteLinkStripMenuItem1_Click);
             // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(228, 6);
+            // 
             // FindShortpathStripMenuItem1
             // 
             this.FindShortpathStripMenuItem1.Image = ((System.Drawing.Image)(resources.GetObject("FindShortpathStripMenuItem1.Image")));
@@ -363,60 +394,30 @@
             this.FindShortpathStripMenuItem1.Text = "Найти кратчайшее решение";
             this.FindShortpathStripMenuItem1.Click += new System.EventHandler(this.FindShortpathStripMenuItem1_Click);
             // 
+            // программаToolStripMenuItem
+            // 
+            this.программаToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.справкаToolStripMenuItem,
+            this.оПрограммеToolStripMenuItem});
+            this.программаToolStripMenuItem.Name = "программаToolStripMenuItem";
+            this.программаToolStripMenuItem.Size = new System.Drawing.Size(84, 26);
+            this.программаToolStripMenuItem.Text = "Программа";
+            // 
             // справкаToolStripMenuItem
             // 
             this.справкаToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("справкаToolStripMenuItem.Image")));
             this.справкаToolStripMenuItem.Name = "справкаToolStripMenuItem";
-            this.справкаToolStripMenuItem.Size = new System.Drawing.Size(149, 22);
+            this.справкаToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.справкаToolStripMenuItem.Text = "Справка";
+            this.справкаToolStripMenuItem.Click += new System.EventHandler(this.СправкаToolStripMenuItem_Click);
             // 
             // оПрограммеToolStripMenuItem
             // 
             this.оПрограммеToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("оПрограммеToolStripMenuItem.Image")));
             this.оПрограммеToolStripMenuItem.Name = "оПрограммеToolStripMenuItem";
-            this.оПрограммеToolStripMenuItem.Size = new System.Drawing.Size(149, 22);
+            this.оПрограммеToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.оПрограммеToolStripMenuItem.Text = "О программе";
             this.оПрограммеToolStripMenuItem.Click += new System.EventHandler(this.ОПрограммеToolStripMenuItem_Click);
-            // 
-            // AddtaskMB
-            // 
-            this.AddtaskMB.Image = global::NetworkGraph.Properties.Resources.AddEvent_16x;
-            this.AddtaskMB.Name = "AddtaskMB";
-            this.AddtaskMB.Size = new System.Drawing.Size(193, 22);
-            this.AddtaskMB.Text = "Добавить задачу";
-            this.AddtaskMB.Click += new System.EventHandler(this.AddtaskMB_Click);
-            // 
-            // EditTaskMenuItem
-            // 
-            this.EditTaskMenuItem.Image = global::NetworkGraph.Properties.Resources.EventModify_16x;
-            this.EditTaskMenuItem.Name = "EditTaskMenuItem";
-            this.EditTaskMenuItem.Size = new System.Drawing.Size(193, 22);
-            this.EditTaskMenuItem.Text = "Редактировать задачу";
-            this.EditTaskMenuItem.Click += new System.EventHandler(this.EditTaskMenuItem_Click);
-            // 
-            // delete
-            // 
-            this.delete.Image = global::NetworkGraph.Properties.Resources.DeleteEvent_16x;
-            this.delete.Name = "delete";
-            this.delete.Size = new System.Drawing.Size(193, 22);
-            this.delete.Text = "Удалить задачу";
-            this.delete.Click += new System.EventHandler(this.Delete_Click);
-            // 
-            // link
-            // 
-            this.link.Image = global::NetworkGraph.Properties.Resources.AddLink_16x;
-            this.link.Name = "link";
-            this.link.Size = new System.Drawing.Size(193, 22);
-            this.link.Text = "Связать с";
-            this.link.Click += new System.EventHandler(this.Link_Click);
-            // 
-            // unlink
-            // 
-            this.unlink.Image = global::NetworkGraph.Properties.Resources.RemoveLink_16x;
-            this.unlink.Name = "unlink";
-            this.unlink.Size = new System.Drawing.Size(193, 22);
-            this.unlink.Text = "Убрать связь с";
-            this.unlink.Click += new System.EventHandler(this.Unlink_Click);
             // 
             // NetworkGraphmap
             // 

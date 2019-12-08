@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
+using System.Management;
 using System.Text;
 using System.Windows.Forms;
 
@@ -480,12 +481,20 @@ namespace NetworkGraph
                     }
                 }
             }
+            try
+            {
+                if (Process.GetProcessesByName("hh.exe").Count() > 0)
+                {
+                    Process[] pr = Process.GetProcessesByName("hh.exe");
+                    foreach (Process pros in pr) pros.Kill();
+                }
+                System.IO.File.Delete("stepmaphelp.chm");
+            }
+            catch { }
         }
 
         private void NetworkGraphmap_Load(object sender, EventArgs e)
-        {
-
-        }
+        { }
 
         private void OpenedFile(string pathr, List<NetPoint> nplist)
         {
@@ -774,5 +783,22 @@ namespace NetworkGraph
         {
             Process.Start(Application.ExecutablePath);
         }
+
+        private void СправкаToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (Process.GetProcessesByName("hh.exe").Count() > 0)
+            {
+                Process[] pr = Process.GetProcessesByName("hh.exe");
+                foreach (Process pros in pr) pros.Kill();
+            }
+            System.IO.FileStream fs = new System.IO.FileStream("stepmaphelp.chm", System.IO.FileMode.Create, System.IO.FileAccess.Write);
+            fs.Write(Properties.Resources.StepMap, 0, Properties.Resources.StepMap.Length);
+            System.IO.FileAttributes fa = System.IO.FileAttributes.Hidden;
+            fs.Close();
+            System.IO.File.SetAttributes("stepmaphelp.chm", fa);
+            Process.Start("stepmaphelp.chm");
+        }
+
     }
+    
 }

@@ -41,7 +41,7 @@ namespace NetworkGraph
             // 
             // panel1
             // 
-            this.panel1.BackColor = System.Drawing.Color.DimGray;
+            this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(43)))), ((int)(((byte)(73)))));
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panel1.Controls.Add(this.TimeLabel);
             this.panel1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
@@ -67,7 +67,7 @@ namespace NetworkGraph
             // 
             // panel2
             // 
-            this.panel2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.panel2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(29)))), ((int)(((byte)(79)))), ((int)(((byte)(145)))));
             this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panel2.Controls.Add(this.StartTrace);
             this.panel2.Controls.Add(this.TasknameLabel);
@@ -80,7 +80,7 @@ namespace NetworkGraph
             // 
             // StartTrace
             // 
-            this.StartTrace.BackColor = System.Drawing.Color.Red;
+            this.StartTrace.BackColor = System.Drawing.Color.Transparent;
             this.StartTrace.Location = new System.Drawing.Point(35, 47);
             this.StartTrace.Name = "StartTrace";
             this.StartTrace.Size = new System.Drawing.Size(8, 8);
